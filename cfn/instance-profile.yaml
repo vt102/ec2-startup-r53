@@ -1,0 +1,44 @@
+Parameters:
+  Domain:
+    Type: String
+    Description: The Route53 hosted zone you are providing access to
+
+Resources:
+  R53Profile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref DomainR53Access
+      InstanceProfileName: !Sub "${Domain}-R53Access-Profile"
+
+  DomainR53Access:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        -
+          PolicyName: Route53Access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - route53:ListResourceRecordSets
+                  - route53:ChangeResourceRecordSets
+                  - route53:ListHostedZonesByName
+                Resource: "*"
+
+
+Outputs:
+  ProfileName:
+    Value: !Sub "${Domain}-R53Access-Profile"

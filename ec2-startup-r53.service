@@ -1,0 +1,10 @@
+[Unit]
+Description=Update Route53 Resource Record Set
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/update_r53.py
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
