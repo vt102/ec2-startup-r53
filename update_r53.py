@@ -25,12 +25,15 @@ instance metadata.
 
 import datetime
 import json
+import logging
 import sys
 import urllib.request
 
 import boto3
 
 target_record = 'andy.aws.example.com'  # pylint: disable=invalid-name
+
+#logging.basicConfig(level=logging.DEBUG)
 
 def get_public_domain():
     '''Returns the public domain name of this EC2 instance from metadata.'''
@@ -46,7 +49,7 @@ def get_hosted_zone():
     client = boto3.client('route53')
     result = client.list_hosted_zones_by_name(DNSName=domain)
     if len(result['HostedZones']) > 1:
-        print(json.dumps(result))
+        logging.warning(json.dumps(result))
         sys.exit("I am not currently prepared to have more than one zone returned.")
     return result['HostedZones'][0]['Id']
 
@@ -88,4 +91,4 @@ def json_serial(obj):
 
 
 if __name__ == '__main__':
-    print(json.dumps(update_r53(), default=json_serial))
+    logging.info(json.dumps(update_r53(), default=json_serial))
