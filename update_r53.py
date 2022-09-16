@@ -31,9 +31,9 @@ import urllib.request
 
 import boto3
 
-target_record = 'andy.aws.example.com'  # pylint: disable=invalid-name
+target_record = 'wiki.minionsofthemonstermaster.com'  # pylint: disable=invalid-name
 
-#logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 def get_public_domain():
     '''Returns the public domain name of this EC2 instance from metadata.'''
@@ -45,9 +45,10 @@ def get_hosted_zone():
     '''Returns the arn for the hosted zone for domain of target_record.'''
 
     domain = '.'.join(target_record.split('.')[1:])
+    logging.warning(f'Domain is {domain}')
 
     client = boto3.client('route53')
-    result = client.list_hosted_zones_by_name(DNSName=domain)
+    result = client.list_hosted_zones_by_name(DNSName=domain, MaxItems='1')
     if len(result['HostedZones']) > 1:
         logging.warning(json.dumps(result))
         sys.exit("I am not currently prepared to have more than one zone returned.")

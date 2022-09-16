@@ -11,6 +11,10 @@ This project assumes the following:
 
 ## Installing:
 
+0. Install python requirements
+    ```
+    sudo pip3 install -r requirements.txt
+    ```
 1. Create instance profile by launching cfn/instance-profile.yaml
     ```
     aws cloudformation create-stack --template-body file://cfn/instance-profile.yaml --stack-name Route53Profile --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=Domain,ParameterValue=aws.example.com
